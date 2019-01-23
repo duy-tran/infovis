@@ -1,0 +1,101 @@
+borough,zip_code,persons_injured,persons_killed,pedestrian_injured,pedestrian_killed,cyclist_injured,cyclist_killed,motorist_injured,motorist_killed,factor1,factor2,factor3,factor4,factor5,vehicle1,vehicle2,vehicle3,vehicle4,vehicle5,datetime
+Manhattan,10010,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/16/2018 0:10
+Brooklyn,11211,4,0,0,0,0,0,4,0,Driver Inattention/Distraction,Driver Inattention/Distraction,,,,Taxi,Taxi,,,,11/16/2018 0:45
+Bronx,10454,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Garbage or Refuse,Station Wagon/Sport Utility Vehicle,,,,11/16/2018 1:00
+Brooklyn,11221,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/16/2018 1:00
+Bronx,10451,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Taxi,Taxi,,,,11/16/2018 2:50
+Queens,11417,1,0,1,0,0,0,0,0,Driver Inattention/Distraction,,,,,,,,,,11/16/2018 5:30
+Manhattan,10128,0,0,0,0,0,0,0,0,Unspecified,,,,,Station Wagon/Sport Utility Vehicle,,,,,11/16/2018 5:45
+Brooklyn,11206,0,0,0,0,0,0,0,0,Following Too Closely,Driver Inattention/Distraction,,,,Garbage or Refuse,Sedan,,,,11/16/2018 6:02
+Manhattan,10128,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Sedan,Sedan,,,,11/16/2018 6:10
+Brooklyn,11228,0,0,0,0,0,0,0,0,Failure to Yield Right-of-Way,Alcohol Involvement,Unspecified,,,Sedan,Sedan,Sedan,,,11/15/2018 0:00
+Queens,11004,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 0:00
+Queens,11368,0,0,0,0,0,0,0,0,Passing or Lane Usage Improper,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 0:00
+Queens,11375,0,0,0,0,0,0,0,0,Traffic Control Disregarded,Unspecified,Unspecified,,,Sedan,Sedan,Sedan,,,11/15/2018 0:00
+Queens,11413,1,0,0,0,0,0,1,0,Pavement Slippery,,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 0:00
+Brooklyn,11204,0,0,0,0,0,0,0,0,Backing Unsafely,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 0:17
+Brooklyn,11230,0,0,0,0,0,0,0,0,Failure to Yield Right-of-Way,Unspecified,,,,Sedan,Dump,,,,11/15/2018 10:00
+Queens,11434,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,,,,,Sedan,,,,,11/15/2018 10:00
+Brooklyn,11229,1,0,1,0,0,0,0,0,Backing Unsafely,,,,,Sedan,,,,,11/15/2018 10:00
+Queens,11374,0,0,0,0,0,0,0,0,Failure to Yield Right-of-Way,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 10:09
+Queens,11378,0,0,0,0,0,0,0,0,Backing Unsafely,Unspecified,,,,Tractor Truck Diesel,Tanker,,,,11/15/2018 10:10
+Manhattan,10036,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Box Truck,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 10:15
+Brooklyn,11215,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,Unspecified,,,Station Wagon/Sport Utility Vehicle,Sedan,Sedan,,,11/15/2018 10:30
+Brooklyn,11230,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 10:30
+Brooklyn,11229,1,0,0,0,1,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Bike,Sedan,,,,11/15/2018 10:35
+Bronx,10473,0,0,0,0,0,0,0,0,Unsafe Lane Changing,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 10:36
+Manhattan,10036,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 10:42
+Manhattan,10065,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Taxi,Taxi,,,,11/15/2018 10:43
+Brooklyn,11215,0,0,0,0,0,0,0,0,Backing Unsafely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Tractor Truck Diesel,,,,11/15/2018 10:59
+Queens,11385,0,0,0,0,0,0,0,0,Unspecified,,,,,Box Truck,,,,,11/15/2018 11:02
+Manhattan,10036,0,0,0,0,0,0,0,0,Unsafe Lane Changing,Unspecified,,,,Van,Sedan,,,,11/15/2018 11:15
+Bronx,10456,0,0,0,0,0,0,0,0,Failure to Yield Right-of-Way,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 11:16
+Manhattan,10035,0,0,0,0,0,0,0,0,Unspecified,Unspecified,Unspecified,,,Sedan,Box Truck,Box Truck,,,11/15/2018 11:20
+Brooklyn,11209,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 11:21
+Queens,11373,0,0,0,0,0,0,0,0,Following Too Closely,Driver Inattention/Distraction,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 11:25
+Bronx,10467,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Bus,,,,11/15/2018 11:26
+Brooklyn,11220,0,0,0,0,0,0,0,0,Unspecified,,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 11:37
+Bronx,10455,0,0,0,0,0,0,0,0,Other Vehicular,Unspecified,,,,Box Truck,Sedan,,,,11/15/2018 11:40
+Manhattan,10025,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Sedan,Taxi,,,,11/15/2018 11:40
+Bronx,10470,0,0,0,0,0,0,0,0,Unspecified,,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 11:50
+Brooklyn,11221,0,0,0,0,0,0,0,0,Unspecified,,,,,Sedan,,,,,11/15/2018 12:00
+Brooklyn,11206,1,0,0,0,0,0,1,0,Traffic Control Disregarded,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 12:15
+Bronx,10455,0,0,0,0,0,0,0,0,Passing Too Closely,Passing Too Closely,,,,Sedan,Tanker,,,,11/15/2018 12:20
+Brooklyn,11221,0,0,0,0,0,0,0,0,Passing Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 12:20
+Manhattan,10022,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Driver Inattention/Distraction,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 12:20
+Bronx,10460,0,0,0,0,0,0,0,0,Other Vehicular,Reaction to Uninvolved Vehicle,,,,Bus,Sedan,,,,11/15/2018 12:25
+Staten Island,10306,0,0,0,0,0,0,0,0,Backing Unsafely,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 14:07
+Manhattan,10128,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Box Truck,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 12:40
+Manhattan,10016,0,0,0,0,0,0,0,0,Traffic Control Disregarded,Unspecified,,,,Bike,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 12:45
+Brooklyn,11214,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Bus,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 13:00
+Queens,11373,0,0,0,0,0,0,0,0,Traffic Control Disregarded,Passing Too Closely,,,,Station Wagon/Sport Utility Vehicle,Box Truck,,,,11/15/2018 13:00
+Manhattan,10001,1,0,0,0,0,0,1,0,Brakes Defective,Unspecified,,,,Sedan,Taxi,,,,11/15/2018 13:05
+Brooklyn,11232,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 13:20
+Queens,11413,1,0,0,0,0,0,1,0,Unspecified,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 13:25
+Bronx,10457,0,0,0,0,0,0,0,0,Passing Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 13:30
+Brooklyn,11203,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 13:30
+Brooklyn,11214,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 13:30
+Brooklyn,11226,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 14:00
+Queens,11357,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 14:05
+Queens,11691,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 14:15
+Staten Island,10312,0,0,0,0,0,0,0,0,Other Vehicular,Following Too Closely,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:15
+Queens,11434,2,0,0,0,0,0,2,0,Following Too Closely,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 14:20
+Brooklyn,11215,0,0,0,0,0,0,0,0,Backing Unsafely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:30
+Queens,11363,0,0,0,0,0,0,0,0,Passing or Lane Usage Improper,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:30
+Staten Island,10306,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:30
+Queens,11369,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 14:37
+Brooklyn,11203,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:40
+Brooklyn,11229,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:40
+Brooklyn,11210,0,0,0,0,0,0,0,0,Brakes Defective,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:45
+Queens,11374,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,Unspecified,,,Station Wagon/Sport Utility Vehicle,Sedan,Sedan,,,11/15/2018 14:45
+Staten Island,10306,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:45
+Queens,11420,1,0,0,0,0,0,1,0,Pavement Slippery,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:45
+Queens,11432,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 14:50
+Queens,11354,1,0,1,0,0,0,0,0,Failure to Yield Right-of-Way,,,,,Sedan,,,,,11/15/2018 14:50
+Staten Island,10306,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 14:55
+Brooklyn,11232,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Motorcycle,Box Truck,,,,11/15/2018 15:20
+Brooklyn,11206,1,0,0,0,0,0,1,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 14:55
+Bronx,10451,0,0,0,0,0,0,0,0,Unspecified,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:00
+Brooklyn,11214,0,0,0,0,0,0,0,0,Brakes Defective,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 15:00
+Brooklyn,11226,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:00
+Queens,11418,0,0,0,0,0,0,0,0,Driver Inattention/Distraction,Unspecified,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 15:00
+Queens,11433,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Sedan,Snow Plow,,,,11/15/2018 15:00
+Staten Island,10304,0,0,0,0,0,0,0,0,Pavement Slippery,,,,,Pick-up Truck,,,,,11/15/2018 15:00
+Brooklyn,11220,1,0,0,0,0,0,1,0,Following Too Closely,Unspecified,Unspecified,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:00
+Bronx,10459,0,0,0,0,0,0,0,0,Passing Too Closely,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 15:09
+Bronx,10458,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 15:10
+Brooklyn,11229,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 15:15
+Queens,11374,0,0,0,0,0,0,0,0,Passing Too Closely,Unspecified,,,,Sedan,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 15:15
+Queens,11414,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 15:15
+Brooklyn,11203,1,0,0,0,0,0,1,0,Lost Consciousness,Unspecified,,,,Sedan,Sedan,,,,11/15/2018 15:18
+Bronx,10456,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Taxi,,,,11/15/2018 15:20
+Brooklyn,11206,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Taxi,Sedan,,,,11/15/2018 15:20
+Brooklyn,11214,2,0,0,0,0,0,2,0,Failure to Yield Right-of-Way,Pavement Slippery,,,,Sedan,Sedan,,,,11/15/2018 15:21
+Brooklyn,11204,0,0,0,0,0,0,0,0,Failure to Yield Right-of-Way,Unspecified,,,,Station Wagon/Sport Utility Vehicle,,,,,11/15/2018 15:24
+Staten Island,10306,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:25
+Brooklyn,11238,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:28
+Brooklyn,11221,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Box Truck,Station Wagon/Sport Utility Vehicle,,,,11/15/2018 15:30
+Manhattan,10033,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Box Truck,,,,11/15/2018 15:30
+Queens,11364,0,0,0,0,0,0,0,0,Following Too Closely,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:30
+Queens,11417,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Pick-up Truck,,,,11/15/2018 15:30
+Queens,11435,0,0,0,0,0,0,0,0,Pavement Slippery,Unspecified,,,,Station Wagon/Sport Utility Vehicle,Sedan,,,,11/15/2018 15:30

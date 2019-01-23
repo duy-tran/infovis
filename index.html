@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>NYC</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
+    <style>
+    h4 a {
+      font-size:1pc;
+      font-weight:normal;
+      }
+    .dc-chart g.postalCode path {
+        stroke: #bbb;
+    }
+    .dc-chart g.postalCode:hover {
+        fill: black;
+    }
+    .dc-chart g.row text {fill: black;}
+    #chart-day-of-week g.row text {fill: white;}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+<h2>NYC Motor Vehicle Collisions</h2>
+<div class="row">
+<div class="dc-data-count">
+        <span class="filter-count"></span>
+         selected out of 
+        <span class="total-count"></span>
+         records | 
+        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a>
+</div>
+</div>
+<div class="row">
+    <div class="span8" id="chart-zip">
+        <h4>Collision distribution by area
+        <a class="reset" href="javascript:zipChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+        </h4>
+        <div class="clearfix"></div>
+    </div>
+    <div class="span4">
+        <div class="row">
+            <div class="span12" id="chart-borough">
+                <div class="row">
+                    <h4>Number of collisions per borough
+                        <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();"
+                        style="display: none;">
+                        reset
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12" id="chart-ring-year">
+              <div class="row"><h4>Year of collision <a class="reset"
+                href="javascript:yearRingChart.filterAll();dc.redrawAll();"
+                style="display: none;">
+                reset
+              </a>
+              </h4></div>
+            </div>              
+        </div> 
+        <div class="row">
+            <div class="span12" id="chart-injured">
+                <div class="row"><h4>Number of persons injured <a class="reset"
+                href="javascript:injuredChart.filterAll();dc.redrawAll();"
+                style="display: none;">
+                reset
+                </a>
+                </h4>
+            </div>
+            </div>      
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="span4" id="chart-day-of-week">
+        <h4>Day of the week
+            <a class="reset"
+                href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
+                style="display: none;">
+                reset
+            </a>
+        </h4>
+    </div>
+    <div class="span4" id="chart-factor">
+        <h4>Factors
+            <a class="reset"
+                href="javascript:factorChart.filterAll();dc.redrawAll();"
+                style="display: none;">
+                reset
+            </a>
+        </h4>
+    </div>
+    <div class="span4" id="chart-vehicle">
+        <h4>Vehicle
+            <a class="reset"
+                href="javascript:vehicleChart.filterAll();dc.redrawAll();"
+                style="display: none;">
+                reset
+            </a>
+        </h4>
+    </div>
+</div>
+<!-- <div class="row">
+    <div class='span12' id='dc-time-chart'>
+      <h4>
+        Events per hour
+        <span>
+          <a class="reset"
+            href="javascript:timeChart.filterAll();dc.redrawAll();"
+            style="display: none;">
+            reset
+          </a>
+        </span>
+      </h4>
+    </div>
+</div> -->
+
+<script type="text/javascript" src="../js/d3.js"></script>
+<script type="text/javascript" src="../js/crossfilter.js"></script>
+<script type="text/javascript" src="../js/dc.js"></script>
+<script type="text/javascript">
+
+var yearRingChart   = dc.pieChart("#chart-ring-year"),
+    injuredChart  = dc.barChart("#chart-injured"),
+    boroughChart = dc.rowChart("#chart-borough"),
+    dayOfWeekChart = dc.rowChart("#chart-day-of-week")
+    factorChart = dc.rowChart("#chart-factor"),
+    vehicleChart = dc.rowChart("#chart-vehicle"),
+    zipChart = dc.geoChoroplethChart("#chart-zip");
+    // timeChart = dc.lineChart("#dc-time-chart");
+
+function remove_empty_bins(source_group) {
+    return {
+        all:function () {
+            return source_group.all().filter(function(d) {
+                return d.value != 0;
+            });
+        }
+    };
+}
+
+var parseDate = d3.timeParse("%m/%d/%Y %H:%M");
+var getYear = d3.timeFormat("%Y");
+var getHour = d3.timeFormat("%d/%m/%Y %H");
+d3.csv("./data/100k.csv").then(function(data) {
+    var i;
+    data.forEach(function(d) {
+        d.persons_killed = +d.persons_killed;
+        d.persons_injured = +d.persons_injured;
+        d.pedestrian_killed = +d.pedestrian_killed;
+        d.pedestrian_injured = +d.pedestrian_injured;
+        d.cyclist_killed = +d.cyclist_killed;
+        d.cyclist_injured = +d.cyclist_injured;
+        d.motorist_killed = +d.motorist_killed;
+        d.motorist_injured = +d.motorist_injured;
+        d.datetime = parseDate(d.datetime);
+        d.factors = [];
+        d.vehicles = [];
+        for (i = 1; i <= 5; i++){
+            if (!d['factor'+i] || !d['vehicle'+i]) {break;}
+            d.factors.push(d['factor'+i]);
+            d.vehicles.push(d['vehicle'+i]);
+        }
+      });
+
+    console.log("Finish loading data");
+    console.log(data[0])
+    
+    var facts = crossfilter(data),
+        all = facts.groupAll();
+
+    var dateDim = facts.dimension(function(d) {return getYear(d.datetime);}),
+        diePerday = dateDim.group().reduceSum(function(d) {return +d.persons_injured;});
+
+    var injuredDim = facts.dimension(function(d) {return +d.persons_injured;}),
+        injuredHist = injuredDim.group().reduceCount(),
+        nonEmptyHist = remove_empty_bins(injuredHist);
+
+    var boroughDim = facts.dimension(function(d) {return d.borough;}),  
+        diePerBorough = boroughDim.group().reduceCount();
+        
+
+    var factorDim = facts.dimension(function(d) {return d.factors}, true),
+        vehicleDim = facts.dimension(function(d) {return d.vehicles}, true),
+        factorGroup = factorDim.group(),
+        vehicleGroup = vehicleDim.group();
+
+    var zipDim = facts.dimension(function (d) {return d.zip_code;}),
+        zipGroup = zipDim.group().reduceCount();
+
+    var dayOfWeek = facts.dimension(function (d) {
+        var day = d.datetime.getDay();
+        var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return day + '.' + name[day];
+    });
+    var dayOfWeekGroup = dayOfWeek.group();
+
+    // var volumeByHour = facts.dimension(function(d) {
+    //         return getHour(d.datetime);
+    //     });
+
+    // var volumeByHourGroup = volumeByHour.group().reduceCount();
+
+    // count all the facts
+    dc.dataCount(".dc-data-count")
+        .dimension(facts)
+        .group(all);
+
+    yearRingChart
+        .width(200).height(200)
+        .dimension(dateDim)
+        .group(diePerday)
+        .innerRadius(50)
+        .turnOnControls(true);
+
+    injuredChart
+        .width(300).height(200)
+        .dimension(injuredDim)
+        .group(nonEmptyHist)
+        .x(d3.scaleBand())
+        .xUnits(dc.units.ordinal)
+        .elasticX(true)
+        .elasticY(true)
+        .brushOn(true)
+        .controlsUseVisibility(true)
+        .xAxis().tickFormat();
+
+    boroughChart
+        .width(350).height(200)
+        .dimension(boroughDim)
+        .group(diePerBorough)
+        .elasticX(true)
+        .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .xAxis().ticks(5);
+
+    dayOfWeekChart
+        .width(350).height(200)
+        .dimension(dayOfWeek)
+        .group(dayOfWeekGroup)
+        .elasticX(true)
+        .ordinalColors(['#003954', '#00496D', '#005A85', '#006A9D', '#007AB6', '#0589CE', '#1098E7'])
+        .label(function (d) {
+            return d.key.split('.')[1];
+        })
+        .xAxis().ticks(3);
+
+    factorChart
+        .width(350).height(200)
+        .dimension(factorDim)
+        .cap(5)
+        .group(factorGroup)
+        .elasticX(true)
+        .xAxis().ticks(3);
+
+    vehicleChart
+        .width(350).height(200)
+        .dimension(vehicleDim)
+        .cap(5)
+        .group(vehicleGroup)
+        .elasticX(true)
+        .xAxis().ticks(3);
+
+    d3.json("./data/nyc.geojson").then(function (nycjson) {
+        var size = 600;
+        zipChart.width(size)
+                .height(size)
+                .dimension(zipDim)
+                .group(zipGroup)
+                .colors(d3.scaleQuantize().range(['#ffffb2','#fed976','#feb24c','#fd8d3c','#fc4e2a','#e31a1c','#b10026']))
+                .colorDomain([0, 2000])
+                .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
+                .overlayGeoJson(nycjson.features, "postalCode", function (d) {
+                    return d.properties.postalCode;
+                })
+            .projection(d3.geoMercator().fitSize([0.95*size,0.95*size],nycjson))
+            .valueAccessor(function(kv) {
+                return kv.value;
+            })
+            .title(function (d) {
+                return "Zip code: "+ d.key + "\nCollisions: " + d.value;
+            });
+
+            dc.renderAll();
+        });
+
+});
+</script>
+
+</div>
+</body>
+</html>
