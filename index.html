@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>NYC</title>
+    <title>NYC Motor Vehicle Collisions</title>
     <meta charset="UTF-8">
+    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
     <style>
@@ -175,8 +176,8 @@ d3.csv("./data/100k.csv").then(function(data) {
     var facts = crossfilter(data),
         all = facts.groupAll();
 
-    var dateDim = facts.dimension(function(d) {return getYear(d.datetime);}),
-        diePerday = dateDim.group().reduceSum(function(d) {return +d.persons_injured;});
+    var yearDim = facts.dimension(function(d) {return getYear(d['datetime']);}),
+        collisionsPerYear = yearDim.group().reduceCount();
 
     var injuredDim = facts.dimension(function(d) {return +d.persons_injured;}),
         injuredHist = injuredDim.group().reduceCount(),
@@ -214,22 +215,22 @@ d3.csv("./data/100k.csv").then(function(data) {
 
     yearRingChart
         .width(200).height(200)
-        .dimension(dateDim)
-        .group(diePerday)
-        .innerRadius(50)
-        .turnOnControls(true);
+        .dimension(yearDim)
+        .group(collisionsPerYear)
+        .innerRadius(50);
 
     injuredChart
-        .width(300).height(200)
+        .width(350).height(200)
         .dimension(injuredDim)
         .group(nonEmptyHist)
         .x(d3.scaleBand())
         .xUnits(dc.units.ordinal)
         .elasticX(true)
         .elasticY(true)
-        .brushOn(true)
-        .controlsUseVisibility(true)
-        .xAxis().tickFormat();
+        .yAxis().tickFormat(function (d) {
+            return (d/1000) + "k";
+        });
+        
 
     boroughChart
         .width(350).height(200)
