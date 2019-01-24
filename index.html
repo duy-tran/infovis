@@ -11,6 +11,10 @@
         font-size:14px;
         font-weight:normal;
     }
+    h4 span {
+        font-size:14px;
+        font-weight:normal;
+    }
     h4:first-letter {
         text-transform:capitalize;
     }
@@ -21,6 +25,7 @@
     label input {
         vertical-align: top;
     }
+    #dc-range-chart svg g g.axis.y { display: none; }
     .dc-chart g.postalCode path {
         stroke: #bbb;
     }
@@ -128,20 +133,24 @@
         </h4>
     </div>
 </div>
-<!-- <div class="row">
+<div class="row">
     <div class='span12' id='dc-time-chart'>
       <h4>
-        Events per hour
-        <span>
+        Timeline
+        <span class="reset" style="visibility: hidden;">
+        selected range: 
+        <span class="filter"></span>
           <a class="reset"
-            href="javascript:timeChart.filterAll();dc.redrawAll();"
-            style="display: none;">
+            href="javascript:timeChart.filterAll();rangeChart.filterAll();dc.redrawAll();"
+            style="visibility: hidden;">
             reset
           </a>
         </span>
       </h4>
     </div>
-</div> -->
+    <div class='span12' id='dc-range-chart'>
+    </div>
+</div>
 
 <script type="text/javascript" src="../js/d3.js"></script>
 <script type="text/javascript" src="../js/crossfilter.js"></script>
@@ -154,8 +163,9 @@ var yearRingChart   = dc.pieChart("#chart-ring-year"),
     dayOfWeekChart = dc.rowChart("#chart-day-of-week")
     factorChart = dc.rowChart("#chart-factor"),
     vehicleChart = dc.rowChart("#chart-vehicle"),
-    zipChart = dc.geoChoroplethChart("#chart-zip");
-    // timeChart = dc.lineChart("#dc-time-chart");
+    zipChart = dc.geoChoroplethChart("#chart-zip"),
+    timeChart = dc.compositeChart("#dc-time-chart"),
+    rangeChart = dc.barChart("#dc-range-chart");
 
 function remove_empty_bins(source_group) {
     return {
@@ -169,7 +179,7 @@ function remove_empty_bins(source_group) {
 
 var parseDate = d3.timeParse("%m/%d/%Y %H:%M");
 var getYear = d3.timeFormat("%Y");
-var getHour = d3.timeFormat("%d/%m/%Y %H");
+var monthDisplay = d3.timeFormat("%b %Y");
 d3.csv("./data/100k.csv").then(function(data) {
     var i;
     data.forEach(function(d) {
@@ -192,7 +202,7 @@ d3.csv("./data/100k.csv").then(function(data) {
       });
 
     console.log("Finish loading data");
-    console.log(data[0])
+    console.log(d3.timeDay(data[0].datetime));
     
     var facts = crossfilter(data),
         all = facts.groupAll();
@@ -206,12 +216,16 @@ d3.csv("./data/100k.csv").then(function(data) {
 
     var boroughDim = facts.dimension(function(d) {return d.borough;}),  
         diePerBorough = boroughDim.group().reduceCount();
-        
 
     var factorDim = facts.dimension(function(d) {return d.factors}, true),
         vehicleDim = facts.dimension(function(d) {return d.vehicles}, true),
         factorGroup = factorDim.group(),
         vehicleGroup = vehicleDim.group();
+
+    var dayDim = facts.dimension(function(d) {return d3.timeMonth(d.datetime);}),
+        collisionsByDayGroup = dayDim.group().reduceCount(),
+        injuredByDayGroup = dayDim.group().reduceSum(function(d) {return d.persons_injured;}),
+        killedByDayGroup = dayDim.group().reduceSum(function(d) {return d.persons_killed;});
 
     var zipDim = facts.dimension(function (d) {return d.zip_code;}),
         zipGroup = zipDim.group().reduceCount(),
@@ -296,6 +310,46 @@ d3.csv("./data/100k.csv").then(function(data) {
         .controlsUseVisibility(true)
         .xAxis().ticks(3);
 
+    timeChart
+        .width(990).height(300)
+        .dimension(dayDim)
+        .controlsUseVisibility(true)
+        .rangeChart(rangeChart)
+        .x(d3.scaleTime().domain([new Date(2012, 7, 1), new Date(2018, 11, 1)]))
+        .round(d3.timeMonth.round)
+        .xUnits(d3.timeMonths)
+        .mouseZoomable(true)
+        .elasticY(true)
+        .legend(dc.legend().x(70).y(200).itemHeight(13).gap(5))
+        .brushOn(false)
+        .renderHorizontalGridLines(true)
+        .title(function(d) { return monthDisplay(d.key) + ': ' + d.value; })
+        .compose([
+            dc.lineChart(timeChart)
+                .group(injuredByDayGroup, "Injured")
+                .ordinalColors(["orange"]),
+            dc.lineChart(timeChart)
+                .group(killedByDayGroup, "Death")
+                .ordinalColors(["red"]),
+            dc.lineChart(timeChart)
+                .group(collisionsByDayGroup, "Collisions")
+                .useRightYAxis(true)
+                ])
+        .yAxisLabel("People injured/killed")
+        .rightYAxisLabel("Number of collisions");
+
+    rangeChart
+        .width(990).height(40)
+        .margins({top: 0, right: 45, bottom: 20, left: 40})
+        .dimension(dayDim)
+        .group(collisionsByDayGroup)
+        .x(d3.scaleTime().domain([new Date(2012, 7, 1), new Date(2018, 11, 16)]))
+        .round(d3.timeMonth.round)
+        .xUnits(d3.timeMonths)
+        .centerBar(true)
+        .alwaysUseRounding(true)
+        .gap(3)
+
     d3.json("./data/nyc.geojson").then(function (nycjson) {
         var size = 600;
 
@@ -341,7 +395,7 @@ d3.csv("./data/100k.csv").then(function(data) {
                     return kv.value;
                 })
                 .title(function (d) {
-                    return "Zip code: "+ d.key + "\nCollisions: " + d.value;
+                    return "Zip code: "+ d.key + "\nNumber: " + d.value;
                 });
 
                 dc.renderAll();
