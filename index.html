@@ -8,9 +8,16 @@
     <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
     <style>
     h4 a {
-      font-size:1pc;
-      font-weight:normal;
+        font-size:1pc;
+        font-weight:normal;
+    }
+    label {
+        display: inline;
+        padding-left: 1em;
       }
+    label input {
+        vertical-align: top;
+    }
     .dc-chart g.postalCode path {
         stroke: #bbb;
     }
@@ -36,11 +43,20 @@
 </div>
 </div>
 <div class="row">
-    <div class="span8" id="chart-zip">
+    <div class="span8">
+        <div class="row" id="chart-zip">
         <h4>Collision distribution by area
         <a class="reset" href="javascript:zipChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
         </h4>
         <div class="clearfix"></div>
+        </div>
+        <div class="row">
+        <div class="span12" id="select-operation">
+            <label><input type=radio name="operation" value="collisions" checked="true"> Collisions</label>
+            <label><input type=radio name="operation" value="injured"> Injured</label>
+            <label><input type=radio name="operation" value="killed"> Killed</label>
+        </div>
+        </div>
     </div>
     <div class="span4">
         <div class="row">
@@ -193,7 +209,9 @@ d3.csv("./data/100k.csv").then(function(data) {
         vehicleGroup = vehicleDim.group();
 
     var zipDim = facts.dimension(function (d) {return d.zip_code;}),
-        zipGroup = zipDim.group().reduceCount();
+        zipGroup = zipDim.group().reduceCount(),
+        zipInjuredGroup = zipDim.group().reduceSum(function(d) {return d.persons_injured;}),
+        zipKilledGroup = zipDim.group().reduceSum(function(d) {return d.persons_killed;});
 
     var dayOfWeek = facts.dimension(function (d) {
         var day = d.datetime.getDay();
@@ -269,30 +287,54 @@ d3.csv("./data/100k.csv").then(function(data) {
 
     d3.json("./data/nyc.geojson").then(function (nycjson) {
         var size = 600;
+
+        var accessors = {
+            collisions: zipGroup,
+            injured: zipInjuredGroup,
+            killed: zipKilledGroup
+        };
+
+        var colorRange = {
+            collisions: d3.interpolateYlOrRd,
+            injured: d3.interpolateYlGnBu,
+            killed: d3.interpolatePuRd
+        }; 
+
+        d3.selectAll('#select-operation input')
+          .on('click', function() {
+              zipChart.group(accessors[this.value])
+                        .colors(d3.scaleSequential(colorRange[this.value]));
+              dc.redrawAll();
+          });
+
+        zipChart.on("preRender", function(chart) {
+            zipChart.colorDomain(d3.extent(zipChart.data(), zipChart.valueAccessor()));
+        });
+        zipChart.on("preRedraw", function(chart) {
+            zipChart.colorDomain(d3.extent(zipChart.data(), zipChart.valueAccessor()));
+        });
+
         zipChart.width(size)
                 .height(size)
                 .dimension(zipDim)
                 .group(zipGroup)
-                .colors(d3.scaleQuantize().range(['#ffffb2','#fed976','#feb24c','#fd8d3c','#fc4e2a','#e31a1c','#b10026']))
-                .colorDomain([0, 2000])
+                .colors(d3.scaleSequential(d3.interpolateYlOrRd))
                 .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
                 .overlayGeoJson(nycjson.features, "postalCode", function (d) {
                     return d.properties.postalCode;
                 })
-            .projection(d3.geoMercator().fitSize([0.95*size,0.95*size],nycjson))
-            .valueAccessor(function(kv) {
-                return kv.value;
-            })
-            .title(function (d) {
-                return "Zip code: "+ d.key + "\nCollisions: " + d.value;
-            });
+                .projection(d3.geoMercator().fitSize([0.95*size,0.95*size],nycjson))
+                .valueAccessor(function(kv) {
+                    return kv.value;
+                })
+                .title(function (d) {
+                    return "Zip code: "+ d.key + "\nCollisions: " + d.value;
+                });
 
-            dc.renderAll();
+                dc.renderAll();
         });
-
 });
 </script>
-
 </div>
 </body>
 </html>
