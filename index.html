@@ -8,8 +8,11 @@
     <link rel="stylesheet" type="text/css" href="../css/dc.css"/>
     <style>
     h4 a {
-        font-size:1pc;
+        font-size:14px;
         font-weight:normal;
+    }
+    h4:first-letter {
+        text-transform:capitalize;
     }
     label {
         display: inline;
@@ -45,9 +48,11 @@
 <div class="row">
     <div class="span8">
         <div class="row" id="chart-zip">
-        <h4>Collision distribution by area
-        <a class="reset" href="javascript:zipChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-        </h4>
+        <h4 id="map-title">Collisions distribution by area</h4>
+        <div class="reset" style="visibility: hidden;">
+            <a href="javascript:zipChart.filterAll();dc.redrawAll();">reset</a>
+        </div>
+        <!-- <a class="reset" href="javascript:zipChart.filterAll();dc.redrawAll();" style="visibility: hidden;">reset</a></h4> -->
         <div class="clearfix"></div>
         </div>
         <div class="row">
@@ -64,7 +69,7 @@
                 <div class="row">
                     <h4>Number of collisions per borough
                         <a class="reset" href="javascript:boroughChart.filterAll();dc.redrawAll();"
-                        style="display: none;">
+                        style="visibility: hidden;">
                         reset
                         </a>
                     </h4>
@@ -75,7 +80,7 @@
             <div class="span12" id="chart-ring-year">
               <div class="row"><h4>Year of collision <a class="reset"
                 href="javascript:yearRingChart.filterAll();dc.redrawAll();"
-                style="display: none;">
+                style="visibility: hidden;">
                 reset
               </a>
               </h4></div>
@@ -85,7 +90,7 @@
             <div class="span12" id="chart-injured">
                 <div class="row"><h4>Number of persons injured <a class="reset"
                 href="javascript:injuredChart.filterAll();dc.redrawAll();"
-                style="display: none;">
+                style="visibility: hidden;">
                 reset
                 </a>
                 </h4>
@@ -99,7 +104,7 @@
         <h4>Day of the week
             <a class="reset"
                 href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();"
-                style="display: none;">
+                style="visibility: hidden;">
                 reset
             </a>
         </h4>
@@ -108,7 +113,7 @@
         <h4>Factors
             <a class="reset"
                 href="javascript:factorChart.filterAll();dc.redrawAll();"
-                style="display: none;">
+                style="visibility: hidden;">
                 reset
             </a>
         </h4>
@@ -117,7 +122,7 @@
         <h4>Vehicle
             <a class="reset"
                 href="javascript:vehicleChart.filterAll();dc.redrawAll();"
-                style="display: none;">
+                style="visibility: hidden;">
                 reset
             </a>
         </h4>
@@ -235,6 +240,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .width(200).height(200)
         .dimension(yearDim)
         .group(collisionsPerYear)
+        .controlsUseVisibility(true)
         .innerRadius(50);
 
     injuredChart
@@ -245,6 +251,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .xUnits(dc.units.ordinal)
         .elasticX(true)
         .elasticY(true)
+        .controlsUseVisibility(true)
         .yAxis().tickFormat(function (d) {
             return (d/1000) + "k";
         });
@@ -256,6 +263,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .group(diePerBorough)
         .elasticX(true)
         .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .controlsUseVisibility(true)
         .xAxis().ticks(5);
 
     dayOfWeekChart
@@ -267,6 +275,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .label(function (d) {
             return d.key.split('.')[1];
         })
+        .controlsUseVisibility(true)
         .xAxis().ticks(3);
 
     factorChart
@@ -275,6 +284,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .cap(5)
         .group(factorGroup)
         .elasticX(true)
+        .controlsUseVisibility(true)
         .xAxis().ticks(3);
 
     vehicleChart
@@ -283,6 +293,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .cap(5)
         .group(vehicleGroup)
         .elasticX(true)
+        .controlsUseVisibility(true)
         .xAxis().ticks(3);
 
     d3.json("./data/nyc.geojson").then(function (nycjson) {
@@ -302,9 +313,10 @@ d3.csv("./data/100k.csv").then(function(data) {
 
         d3.selectAll('#select-operation input')
           .on('click', function() {
-              zipChart.group(accessors[this.value])
+                document.getElementById("map-title").innerHTML=this.value + " distribution by area";
+                zipChart.group(accessors[this.value])
                         .colors(d3.scaleSequential(colorRange[this.value]));
-              dc.redrawAll();
+                dc.redrawAll();
           });
 
         zipChart.on("preRender", function(chart) {
@@ -318,6 +330,7 @@ d3.csv("./data/100k.csv").then(function(data) {
                 .height(size)
                 .dimension(zipDim)
                 .group(zipGroup)
+                .controlsUseVisibility(true)
                 .colors(d3.scaleSequential(d3.interpolateYlOrRd))
                 .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
                 .overlayGeoJson(nycjson.features, "postalCode", function (d) {
