@@ -222,10 +222,10 @@ d3.csv("./data/100k.csv").then(function(data) {
         factorGroup = factorDim.group(),
         vehicleGroup = vehicleDim.group();
 
-    var dayDim = facts.dimension(function(d) {return d3.timeMonth(d.datetime);}),
-        collisionsByDayGroup = dayDim.group().reduceCount(),
-        injuredByDayGroup = dayDim.group().reduceSum(function(d) {return d.persons_injured;}),
-        killedByDayGroup = dayDim.group().reduceSum(function(d) {return d.persons_killed;});
+    var monthDim = facts.dimension(function(d) {return d3.timeMonth(d.datetime);}),
+        collisionsByMonthGroup = monthDim.group().reduceCount(),
+        injuredByMonthGroup = monthDim.group().reduceSum(function(d) {return d.persons_injured;}),
+        killedByMonthGroup = monthDim.group().reduceSum(function(d) {return d.persons_killed;});
 
     var zipDim = facts.dimension(function (d) {return d.zip_code;}),
         zipGroup = zipDim.group().reduceCount(),
@@ -238,12 +238,6 @@ d3.csv("./data/100k.csv").then(function(data) {
         return day + '.' + name[day];
     });
     var dayOfWeekGroup = dayOfWeek.group();
-
-    // var volumeByHour = facts.dimension(function(d) {
-    //         return getHour(d.datetime);
-    //     });
-
-    // var volumeByHourGroup = volumeByHour.group().reduceCount();
 
     // count all the facts
     dc.dataCount(".dc-data-count")
@@ -312,7 +306,7 @@ d3.csv("./data/100k.csv").then(function(data) {
 
     timeChart
         .width(990).height(300)
-        .dimension(dayDim)
+        .dimension(monthDim)
         .controlsUseVisibility(true)
         .rangeChart(rangeChart)
         .x(d3.scaleTime().domain([new Date(2012, 7, 1), new Date(2018, 11, 1)]))
@@ -326,13 +320,13 @@ d3.csv("./data/100k.csv").then(function(data) {
         .title(function(d) { return monthDisplay(d.key) + ': ' + d.value; })
         .compose([
             dc.lineChart(timeChart)
-                .group(injuredByDayGroup, "Injured")
+                .group(injuredByMonthGroup, "Injured")
                 .ordinalColors(["orange"]),
             dc.lineChart(timeChart)
-                .group(killedByDayGroup, "Death")
+                .group(killedByMonthGroup, "Death")
                 .ordinalColors(["red"]),
             dc.lineChart(timeChart)
-                .group(collisionsByDayGroup, "Collisions")
+                .group(collisionsByMonthGroup, "Collisions")
                 .useRightYAxis(true)
                 ])
         .yAxisLabel("People injured/killed")
@@ -341,8 +335,8 @@ d3.csv("./data/100k.csv").then(function(data) {
     rangeChart
         .width(990).height(40)
         .margins({top: 0, right: 45, bottom: 20, left: 40})
-        .dimension(dayDim)
-        .group(collisionsByDayGroup)
+        .dimension(monthDim)
+        .group(collisionsByMonthGroup)
         .x(d3.scaleTime().domain([new Date(2012, 7, 1), new Date(2018, 11, 16)]))
         .round(d3.timeMonth.round)
         .xUnits(d3.timeMonths)
