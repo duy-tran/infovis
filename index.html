@@ -25,6 +25,17 @@
     label input {
         vertical-align: top;
     }
+    div.inline {
+        float: left;
+        display: inline-block;
+    }
+    /* basic positioning */
+    .legend { list-style: none; }
+    .legend li { float: left; margin-right: 10px; }
+    .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+    .legend .pedestrian { background-color: #f4a582; }
+    .legend .cyclist { background-color: #92c5de; }
+    .legend .motorist { background-color: #0571b0; }
     #dc-range-chart svg g g.axis.y { display: none; }
     .dc-chart g.postalCode path {
         stroke: #bbb;
@@ -57,7 +68,6 @@
         <div class="reset" style="visibility: hidden;">
             <a href="javascript:zipChart.filterAll();dc.redrawAll();">reset</a>
         </div>
-        <!-- <a class="reset" href="javascript:zipChart.filterAll();dc.redrawAll();" style="visibility: hidden;">reset</a></h4> -->
         <div class="clearfix"></div>
         </div>
         <div class="row">
@@ -83,7 +93,7 @@
         </div>
         <div class="row">
             <div class="span12" id="chart-ring-year">
-              <div class="row"><h4>Year of collision <a class="reset"
+              <div class="row"><h4>Number of collisions per year <a class="reset"
                 href="javascript:yearRingChart.filterAll();dc.redrawAll();"
                 style="visibility: hidden;">
                 reset
@@ -92,15 +102,18 @@
             </div>              
         </div> 
         <div class="row">
-            <div class="span12" id="chart-injured">
-                <div class="row"><h4>Number of persons injured <a class="reset"
-                href="javascript:injuredChart.filterAll();dc.redrawAll();"
-                style="visibility: hidden;">
-                reset
-                </a>
-                </h4>
+            <h4>Number of people injured / killed</h4>
+            <div class="span2" id="chart-injured"></div>
+            <div class="span2" id="chart-killed"></div>   
+            <div class="legend-holder">
+                <center>
+                <ul class="legend">
+                    <li><span class="pedestrian"></span> Pedestrian</li>
+                    <li><span class="cyclist"></span> Cyclist</li>
+                    <li><span class="motorist"></span> Motorist</li>
+                </ul>
+                </center>                
             </div>
-            </div>      
         </div>
     </div>
 </div>
@@ -157,8 +170,7 @@
 <script type="text/javascript" src="../js/dc.js"></script>
 <script type="text/javascript">
 
-var yearRingChart   = dc.pieChart("#chart-ring-year"),
-    injuredChart  = dc.barChart("#chart-injured"),
+var yearRingChart = dc.pieChart("#chart-ring-year"),
     boroughChart = dc.rowChart("#chart-borough"),
     dayOfWeekChart = dc.rowChart("#chart-day-of-week")
     factorChart = dc.rowChart("#chart-factor"),
@@ -166,16 +178,6 @@ var yearRingChart   = dc.pieChart("#chart-ring-year"),
     zipChart = dc.geoChoroplethChart("#chart-zip"),
     timeChart = dc.compositeChart("#dc-time-chart"),
     rangeChart = dc.barChart("#dc-range-chart");
-
-function remove_empty_bins(source_group) {
-    return {
-        all:function () {
-            return source_group.all().filter(function(d) {
-                return d.value != 0;
-            });
-        }
-    };
-}
 
 var parseDate = d3.timeParse("%m/%d/%Y %H:%M");
 var getYear = d3.timeFormat("%Y");
@@ -210,9 +212,40 @@ d3.csv("./data/100k.csv").then(function(data) {
     var yearDim = facts.dimension(function(d) {return getYear(d['datetime']);}),
         collisionsPerYear = yearDim.group().reduceCount();
 
-    var injuredDim = facts.dimension(function(d) {return +d.persons_injured;}),
-        injuredHist = injuredDim.group().reduceCount(),
-        nonEmptyHist = remove_empty_bins(injuredHist);
+    var dummyDim = facts.dimension(function(d) {return "all";})
+    var peopleCount = dummyDim.group().reduce(
+        function (p, v) {
+            p.injured.pedestrian += v.pedestrian_injured;
+            p.killed.pedestrian += v.pedestrian_killed;
+            p.injured.cyclist += v.cyclist_injured;
+            p.killed.cyclist += v.cyclist_killed;
+            p.injured.motorist += v.motorist_injured;
+            p.killed.motorist += v.motorist_killed;
+            return p;
+        },
+        function (p, v) {
+            p.injured.pedestrian -= v.pedestrian_injured;
+            p.killed.pedestrian -= v.pedestrian_killed;
+            p.injured.cyclist -= v.cyclist_injured;
+            p.killed.cyclist -= v.cyclist_killed;
+            p.injured.motorist -= v.motorist_injured;
+            p.killed.motorist -= v.motorist_killed;
+            return p;
+        },
+        function () {
+            return {
+                killed : {
+                    pedestrian: 0,
+                    cyclist: 0,
+                    motorist: 0
+                },
+                injured : {
+                    pedestrian: 0,
+                    cyclist: 0,
+                    motorist: 0
+                }
+            };
+        });
 
     var boroughDim = facts.dimension(function(d) {return d.borough;}),  
         diePerBorough = boroughDim.group().reduceCount();
@@ -232,6 +265,24 @@ d3.csv("./data/100k.csv").then(function(data) {
         zipInjuredGroup = zipDim.group().reduceSum(function(d) {return d.persons_injured;}),
         zipKilledGroup = zipDim.group().reduceSum(function(d) {return d.persons_killed;});
 
+    var statsByZipGroup = zipDim.group().reduce(
+            function (p, v) {
+                    ++p.collisions;
+                    p.injured += v.persons_injured
+                    p.killed += v.persons_killed
+                    return p;
+            },
+            function (p, v) {
+                    --p.collisions;
+                    p.injured -= v.persons_injured
+                    p.killed -= v.persons_killed
+                    return p;
+            },
+            function () {
+                return {collisions: 0, injured: 0, killed: 0};
+            }
+        );
+
     var dayOfWeek = facts.dimension(function (d) {
         var day = d.datetime.getDay();
         var name = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -250,19 +301,6 @@ d3.csv("./data/100k.csv").then(function(data) {
         .group(collisionsPerYear)
         .controlsUseVisibility(true)
         .innerRadius(50);
-
-    injuredChart
-        .width(350).height(200)
-        .dimension(injuredDim)
-        .group(nonEmptyHist)
-        .x(d3.scaleBand())
-        .xUnits(dc.units.ordinal)
-        .elasticX(true)
-        .elasticY(true)
-        .controlsUseVisibility(true)
-        .yAxis().tickFormat(function (d) {
-            return (d/1000) + "k";
-        });
         
 
     boroughChart
@@ -344,6 +382,8 @@ d3.csv("./data/100k.csv").then(function(data) {
         .alwaysUseRounding(true)
         .gap(3)
 
+    var killedChart, injuredChart;
+
     d3.json("./data/nyc.geojson").then(function (nycjson) {
         var size = 600;
 
@@ -354,8 +394,8 @@ d3.csv("./data/100k.csv").then(function(data) {
         };
 
         var colorRange = {
-            collisions: d3.interpolateYlOrRd,
-            injured: d3.interpolateYlGnBu,
+            collisions: d3.interpolateYlGnBu,
+            injured: d3.interpolateYlOrRd,
             killed: d3.interpolatePuRd
         }; 
 
@@ -374,12 +414,20 @@ d3.csv("./data/100k.csv").then(function(data) {
             zipChart.colorDomain(d3.extent(zipChart.data(), zipChart.valueAccessor()));
         });
 
+        dc.chartRegistry.list().forEach(function(chart) {
+            chart.on('filtered', function() {
+                peopleCountData = peopleCount.top(1)[0].value;
+                injuredChart.data(peopleCountData).render();
+                killedChart.data(peopleCountData).render();
+            });
+        });
+
         zipChart.width(size)
                 .height(size)
                 .dimension(zipDim)
-                .group(zipGroup)
+                .group(accessors['collisions'])
                 .controlsUseVisibility(true)
-                .colors(d3.scaleSequential(d3.interpolateYlOrRd))
+                .colors(d3.scaleSequential(colorRange['collisions']))
                 .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
                 .overlayGeoJson(nycjson.features, "postalCode", function (d) {
                     return d.properties.postalCode;
@@ -393,8 +441,164 @@ d3.csv("./data/100k.csv").then(function(data) {
                 });
 
                 dc.renderAll();
+
+                peopleCountData = peopleCount.top(1)[0].value;
+                console.log("422");
+                console.log(peopleCountData);
+                injuredChart = donut("injured")
+                                .$el(d3.select("#chart-injured"))
+                                .data(peopleCountData)
+                                .render();
+                killedChart = donut("killed")
+                                .$el(d3.select("#chart-killed"))
+                                .data(peopleCountData)
+                                .render();
         });
 });
+</script>
+<script type="text/javascript">
+function donut(category){  
+  // Default settings
+  var $el = d3.select("body")  
+  var data = {};
+  var statType = category;
+
+  var radiusScale = {
+    injured: 2,
+    killed: 2.5
+  }
+
+  // var showTitle = true;
+  var width = 160,
+      height = 160,
+      radius = width / radiusScale[statType];
+
+  var currentVal;
+
+  // var color = d3.scale.category20();
+  var pie = d3.pie()
+    .sort(null)
+    .value(function(d) { return d.value; });
+
+  var svg, g, arc; 
+
+  var object = {};
+
+  var typeColor = {
+        pedestrian : '#f4a582',
+        cyclist : '#92c5de',
+        motorist: '#0571b0'
+      };
+
+  object.render = function(){
+    if(!svg){
+      arc = d3.arc()
+      .outerRadius(radius)
+      .innerRadius(radius - (radius/2));
+
+      svg = $el.append("svg")
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+      g = svg.selectAll(".arc")
+        .data(pie(d3.entries(data)))
+      .enter().append("g")
+      .attr("class", "arc");
+
+      var sum = 0;
+      for (var key in data) {
+          sum += data[key];
+      } 
+
+      g.append("path")
+        // Attach current value to g so that we can use it for animation
+        .each(function(d) { this._current = d; })
+        .attr("d", arc)
+        .style("fill", function(d) { return typeColor[d.data.key]; });
+      g.append("text")
+          .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+          .attr("font-size", "14px")
+          .attr("fill","white")
+          .style("text-anchor", "middle");
+      g.select("text").text(function(d) { if (d.data.value) {return d.data.value}; });
+
+      svg.append("text")
+          .datum(data)
+          .attr("x", 0 )
+          .attr("y", -5 + radius/10 )
+          .attr("class", "text-tooltip");
+
+      svg.append("text")
+          .datum(data)
+          .attr("x", 0 )
+          .attr("y", 15 + radius/10 )
+          .attr("class", "title")  
+          .style("text-anchor", "middle")
+          .style("font-size", "16px")
+          .text(statType);    
+
+      svg.select("text.text-tooltip")
+        .style("text-anchor", "middle")
+        .attr("font-weight", "bold")
+        .style("font-size", radius/3 + "px")
+        .text(sum);
+
+    }else{
+      g.data(pie(d3.entries(data))).exit().remove();
+
+      g.select("path")
+      .transition().duration(900)
+      .attrTween("d", function(a){
+        var i = d3.interpolate(this._current, a);
+        this._current = i(0);
+        return function(t) {
+            return arc(i(t));
+        };
+      })
+
+      var sum = 0;
+      for (var key in data) {
+          sum += data[key];
+      } 
+      g.select("text").transition().duration(900)
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d)[0] + "," + arc.centroid(d)[1] + ")"; })
+      .text(function(d) { if (d.data.value) {return d.data.value;} });
+      svg.select("text.text-tooltip").text(sum+'');
+    }      
+    return object;
+  };
+
+  // Getter and setter methods
+  object.data = function(value){
+    if (!arguments.length) return data;
+    data = value[statType];
+    return object;
+  };
+
+  object.$el = function(value){
+    if (!arguments.length) return $el;
+    $el = value;
+    return object;
+  };
+
+  object.width = function(value){
+    if (!arguments.length) return width;
+    width = value;
+    radius = Math.min(width, height) / 2;
+    return object;
+  };
+
+  object.height = function(value){
+    if (!arguments.length) return height;
+    height = value;
+    radius = Math.min(width, height) / 2;
+    return object;
+  };
+  return object;
+};
+
 </script>
 </div>
 </body>
