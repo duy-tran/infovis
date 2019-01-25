@@ -33,9 +33,9 @@
         .legend { list-style: none; }
         .legend li { float: left; margin-right: 10px; }
         .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
-        .legend .pedestrian { background-color: #f4a582; }
-        .legend .cyclist { background-color: #92c5de; }
-        .legend .motorist { background-color: #0571b0; }
+        .legend .pedestrian { background-color: #BA4F15; }
+        .legend .cyclist { background-color: #1F8A70; }
+        .legend .motorist { background-color: #004358; }
         #dc-range-chart svg g g.axis.y { display: none; }
         .dc-chart g.postalCode path {
             stroke: #bbb;
@@ -71,7 +71,8 @@
         <div class="clearfix"></div>
         </div>
         <div class="row">
-        <div class="span12" id="select-operation">
+        <div class="span8" id="range-legend"></div>
+        <div class="span8" id="select-operation">
             <label><input type=radio name="operation" value="collisions" checked="true"> Collisions</label>
             <label><input type=radio name="operation" value="injured"> Injured</label>
             <label><input type=radio name="operation" value="killed"> Killed</label>
@@ -149,7 +150,7 @@
 <div class="row">
     <div class='span12' id='dc-time-chart'>
       <h4>
-        Timeline
+        Monthly statistics
         <span class="reset" style="visibility: hidden;">
         selected range: 
         <span class="filter"></span>
@@ -283,7 +284,8 @@ d3.csv("./data/100k.csv").then(function(data) {
         .dimension(yearDim)
         .group(collisionsPerYear)
         .controlsUseVisibility(true)
-        .innerRadius(50);
+        .innerRadius(30)
+        .minAngleForLabel(0.05);
         
 
     boroughChart
@@ -291,7 +293,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .dimension(boroughDim)
         .group(diePerBorough)
         .elasticX(true)
-        .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .ordinalColors(['#3F99D7', '#61C4E0', '#85E5E9', '#A9F1E6','#CFF8EA'])
         .controlsUseVisibility(true)
         .xAxis().ticks(5);
 
@@ -313,6 +315,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .cap(5)
         .group(factorGroup)
         .elasticX(true)
+        .ordinalColors(['#3F99D7', '#61C4E0', '#85E5E9', '#A9F1E6','#CFF8EA','#f4a582'])
         .controlsUseVisibility(true)
         .xAxis().ticks(3);
 
@@ -322,6 +325,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .cap(5)
         .group(vehicleGroup)
         .elasticX(true)
+        .ordinalColors(['#3F99D7', '#61C4E0', '#85E5E9', '#A9F1E6','#B5D9CD','#f4a582'])
         .controlsUseVisibility(true)
         .xAxis().ticks(3);
 
@@ -391,6 +395,8 @@ d3.csv("./data/100k.csv").then(function(data) {
           });
 
         zipChart.on("preRender", function(chart) {
+            console.log(d3.extent(zipChart.data(), zipChart.valueAccessor()));
+            console.log(zipChart.data());
             zipChart.colorDomain(d3.extent(zipChart.data(), zipChart.valueAccessor()));
         });
         zipChart.on("preRedraw", function(chart) {
@@ -408,7 +414,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         zipChart.width(size)
                 .height(size)
                 .dimension(zipDim)
-                .group(accessors['collisions'])
+                .group(accessors['collisions']) 
                 .controlsUseVisibility(true)
                 .colors(d3.scaleSequential(colorRange['collisions']))
                 .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
@@ -424,6 +430,7 @@ d3.csv("./data/100k.csv").then(function(data) {
                 });
 
                 dc.renderAll();
+                console.log(zipChart.getColor(1218));
                 peopleCountData = peopleCount.top(1)[0].value;
                 injuredChart = donut("injured")
                                 .$el(d3.select("#chart-injured"))

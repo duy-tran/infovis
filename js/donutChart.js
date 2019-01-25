@@ -26,9 +26,9 @@ function donut(category){
   var object = {};
 
   var typeColor = {
-        pedestrian : '#f4a582',
-        cyclist : '#92c5de',
-        motorist: '#0571b0'
+        pedestrian : '#BA4F15',
+        cyclist : '#1F8A70',
+        motorist: '#004358'
       };
 
   object.render = function(){
@@ -50,7 +50,7 @@ function donut(category){
 
       var sum = 0;
       for (var key in data) {
-          sum += data[key];
+          sum += data[key]*10;
       } 
 
       g.append("path")
@@ -74,16 +74,16 @@ function donut(category){
       svg.append("text")
           .datum(data)
           .attr("x", 0 )
-          .attr("y", 15 + radius/10 )
+          .attr("y", 10 + radius/10 )
           .attr("class", "title")  
           .style("text-anchor", "middle")
-          .style("font-size", "16px")
+          .style("font-size", "14px")
           .text(statType);    
 
       svg.select("text.text-tooltip")
         .style("text-anchor", "middle")
         .attr("font-weight", "bold")
-        .style("font-size", radius/3 + "px")
+        .style("font-size", radius/4 + "px")
         .text(sum);
 
     }else{
@@ -101,7 +101,7 @@ function donut(category){
 
       var sum = 0;
       for (var key in data) {
-          sum += data[key];
+          sum += data[key]*10;
       } 
       g.select("text").transition().duration(900)
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)[0] + "," + arc.centroid(d)[1] + ")"; })
