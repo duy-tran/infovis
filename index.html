@@ -6,46 +6,7 @@
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./css/dc.css"/>
-    <style>
-        h4 a {
-            font-size:14px;
-            font-weight:normal;
-        }
-        h4 span {
-            font-size:14px;
-            font-weight:normal;
-        }
-        h4:first-letter {
-            text-transform:capitalize;
-        }
-        label {
-            display: inline;
-            padding-left: 1em;
-          }
-        label input {
-            vertical-align: top;
-        }
-        div.inline {
-            float: left;
-            display: inline-block;
-        }
-        /* basic positioning */
-        .legend { list-style: none; }
-        .legend li { float: left; margin-right: 10px; }
-        .legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
-        .legend .pedestrian { background-color: #BA4F15; }
-        .legend .cyclist { background-color: #1F8A70; }
-        .legend .motorist { background-color: #004358; }
-        #dc-range-chart svg g g.axis.y { display: none; }
-        .dc-chart g.postalCode path {
-            stroke: #bbb;
-        }
-        .dc-chart g.postalCode:hover {
-            fill: black;
-        }
-        .dc-chart g.row text {fill: black;}
-        #chart-day-of-week g.row text {fill: white;}
-    </style>
+    <link rel="stylesheet" type="text/css" href="./css/custom.css">
 </head>
 <body>
 
@@ -54,6 +15,7 @@
 <h2>NYC Motor Vehicle Collisions</h2>
 <div class="row">
 <div class="dc-data-count" style="padding: 0 0 0 0; margin: 0 0 0 0; padding-left: 20px;">
+        <span style="color: gray;">Choose an area or a chart component to filter</span> |
         <span class="filter-count"></span>
          selected out of 
         <span class="total-count"></span>
@@ -162,8 +124,8 @@
         </span>
       </h4>
     </div>
-    <div class='span12' id='dc-range-chart'>
-    </div>
+    <div class='span12' id='dc-range-chart'></div>
+    <div class="span12"><span class="description">Select a time range to zoom in</span> </div>
 </div>
 
 <script type="text/javascript" src="./js/d3.js"></script>

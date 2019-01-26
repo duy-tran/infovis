@@ -1,0 +1,43 @@
+h4 a {
+    font-size:14px;
+    font-weight:normal;
+}
+h4 span {
+    font-size:14px;
+    font-weight:normal;
+}
+h4:first-letter {
+    text-transform:capitalize;
+}
+label {
+    display: inline;
+    padding-left: 1em;
+}
+label input {
+    vertical-align: top;
+}
+div.inline {
+    float: left;
+    display: inline-block;
+}
+/* basic positioning */
+.legend { list-style: none; }
+.legend li { float: left; margin-right: 10px; }
+.legend span { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
+.legend .pedestrian { background-color: #BA4F15; }
+.legend .cyclist { background-color: #1F8A70; }
+.legend .motorist { background-color: #004358; }
+#dc-range-chart svg g g.axis.y { display: none; }
+.description {
+    color: gray;
+    float: right;
+    margin-bottom: 20px;
+}
+.dc-chart g.postalCode path {
+    stroke: #bbb;
+}
+.dc-chart g.postalCode:hover {
+    fill: black;
+}
+.dc-chart g.row text {fill: black;}
+#chart-day-of-week g.row text {fill: white;}
