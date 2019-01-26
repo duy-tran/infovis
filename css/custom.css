@@ -1,3 +1,17 @@
+#cover {
+    position: fixed; 
+    height: 100%; 
+    width: 100%; 
+    top:0; 
+    left: 0; 
+    background-color: rgba(255,255,255,0.9);  
+    z-index:9999;
+}
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
 h4 a {
     font-size:14px;
     font-weight:normal;
