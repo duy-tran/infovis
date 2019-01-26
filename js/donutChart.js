@@ -50,7 +50,7 @@ function donut(category){
 
       var sum = 0;
       for (var key in data) {
-          sum += data[key]*10;
+          sum += data[key];
       } 
 
       g.append("path")
@@ -101,7 +101,7 @@ function donut(category){
 
       var sum = 0;
       for (var key in data) {
-          sum += data[key]*10;
+          sum += data[key];
       } 
       g.select("text").transition().duration(900)
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)[0] + "," + arc.centroid(d)[1] + ")"; })

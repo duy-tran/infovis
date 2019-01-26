@@ -395,8 +395,6 @@ d3.csv("./data/100k.csv").then(function(data) {
           });
 
         zipChart.on("preRender", function(chart) {
-            console.log(d3.extent(zipChart.data(), zipChart.valueAccessor()));
-            console.log(zipChart.data());
             zipChart.colorDomain(d3.extent(zipChart.data(), zipChart.valueAccessor()));
         });
         zipChart.on("preRedraw", function(chart) {
