@@ -54,7 +54,7 @@
                 <label><input type=radio name="operation" value="injured"> Injured</label>
                 <label><input type=radio name="operation" value="killed"> Killed</label>
             </div>
-            <div class="span4" id="range-legend">
+            <div class="span4" id="range-legend" style="height: 20px;">
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
         </div>
         <div class="row">
             <div class="span12" id="chart-ring-year">
-              <div class="row"><h4>Number of collisions per year <a class="reset"
+              <div class="row"><h4 style="margin: 5px">Number of collisions per year <a class="reset"
                 href="javascript:yearRingChart.filterAll();dc.redrawAll();"
                 style="visibility: hidden;">
                 reset
@@ -410,7 +410,6 @@ d3.csv("./data/100k.csv").then(function(data) {
 
                 dc.renderAll();
                 document.getElementById("cover").className = "hidden";
-                console.log(zipChart.getColor(1218));
                 peopleCountData = peopleCount.top(1)[0].value;
                 injuredChart = donut("injured")
                                 .$el(d3.select("#chart-injured"))
