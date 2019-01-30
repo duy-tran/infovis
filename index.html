@@ -42,19 +42,20 @@
 <div class="row">
     <div class="span8">
         <div class="row" id="chart-zip">
-        <h4  style="padding-left: 20px;" id="map-title">Collisions distribution by area</h4>
-        <div class="reset" style="visibility: hidden;">
+        <h4  style="padding-left: 20px;" id="map-title">Collisions distribution by area
+        <span class="reset" style="visibility: hidden;">
             <a href="javascript:zipChart.filterAll();dc.redrawAll();">reset</a>
+        </span>
+        </h4>
         </div>
-        <div class="clearfix"></div>
-        </div>
-        <div class="row">
-        <div class="span8" id="range-legend"></div>
-        <div class="span8" id="select-operation">
-            <label><input type=radio name="operation" value="collisions" checked="true"> Collisions</label>
-            <label><input type=radio name="operation" value="injured"> Injured</label>
-            <label><input type=radio name="operation" value="killed"> Killed</label>
-        </div>
+        <div class="row">       
+            <div class="span4" id="select-operation">
+                <label><input type=radio name="operation" value="collisions" checked="true"> Collisions</label>
+                <label><input type=radio name="operation" value="injured"> Injured</label>
+                <label><input type=radio name="operation" value="killed"> Killed</label>
+            </div>
+            <div class="span4" id="range-legend">
+            </div>
         </div>
     </div>
     <div class="span4">
@@ -148,6 +149,7 @@
 <script type="text/javascript" src="./js/crossfilter.js"></script>
 <script type="text/javascript" src="./js/dc.js"></script>
 <script type="text/javascript" src="./js/donutChart.js"></script>
+<script type="text/javascript" src="./js/legend.js"></script>
 <script type="text/javascript">
 
 var yearRingChart = dc.pieChart("#chart-ring-year"),
@@ -259,7 +261,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .group(all);
 
     yearRingChart
-        .width(200).height(200)
+        .width(200).height(180)
         .dimension(yearDim)
         .group(collisionsPerYear)
         .controlsUseVisibility(true)
@@ -268,7 +270,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         
 
     boroughChart
-        .width(350).height(200)
+        .width(350).height(180)
         .dimension(boroughDim)
         .group(diePerBorough)
         .elasticX(true)
@@ -387,13 +389,13 @@ d3.csv("./data/100k.csv").then(function(data) {
                 killedChart.data(peopleCountData).render();
             });
         });
-
+        var defaultAccessors = 'collisions';
         zipChart.width(size)
                 .height(size)
                 .dimension(zipDim)
-                .group(accessors['collisions']) 
+                .group(accessors[defaultAccessors]) 
                 .controlsUseVisibility(true)
-                .colors(d3.scaleSequential(colorRange['collisions']))
+                .colors(d3.scaleSequential(colorRange[defaultAccessors]))
                 .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
                 .overlayGeoJson(nycjson.features, "postalCode", function (d) {
                     return d.properties.postalCode;
@@ -418,7 +420,8 @@ d3.csv("./data/100k.csv").then(function(data) {
                                 .$el(d3.select("#chart-killed"))
                                 .data(peopleCountData)
                                 .render();
-        });
+                legend();
+    });               
 });
 </script>
 </div>
