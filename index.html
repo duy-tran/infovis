@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="en">
 <head>
     <title>NYC Motor Vehicle Collisions</title>
@@ -164,7 +164,9 @@ var yearRingChart = dc.pieChart("#chart-ring-year"),
 var parseDate = d3.timeParse("%m/%d/%Y %H:%M");
 var getYear = d3.timeFormat("%Y");
 var monthDisplay = d3.timeFormat("%b %Y");
-d3.csv("./data/100k.csv").then(function(data) {
+var dataSet = "./data/100k.csv";
+function loadData(dataset) {
+d3.csv(dataset).then(function(data) {
     var i;
     data.forEach(function(d) {
         d.persons_killed = +d.persons_killed;
@@ -372,6 +374,10 @@ d3.csv("./data/100k.csv").then(function(data) {
                 document.getElementById("map-title").innerHTML=this.value + " distribution by area";
                 zipChart.group(accessors[this.value])
                         .colors(d3.scaleSequential(colorRange[this.value]));
+                mapLegend.chartType(this.value)
+                        .changeType()
+                        .chartRange(d3.extent(zipChart.data(), zipChart.valueAccessor()))
+                        .changeRange();
                 dc.redrawAll();
           });
 
@@ -387,6 +393,10 @@ d3.csv("./data/100k.csv").then(function(data) {
                 peopleCountData = peopleCount.top(1)[0].value;
                 injuredChart.data(peopleCountData).render();
                 killedChart.data(peopleCountData).render();
+                mapLegend.chartRange(
+                                d3.extent(zipChart.data(), zipChart.valueAccessor())
+                            )
+                        .changeRange();
             });
         });
         var defaultAccessors = 'collisions';
@@ -423,8 +433,9 @@ d3.csv("./data/100k.csv").then(function(data) {
                                 .chartRange(d3.extent(zipChart.data(), zipChart.valueAccessor()))
                                 .chartType(defaultAccessors)
                                 .render();
-    });               
-});
+    });             
+});};
+loadData(dataSet);  
 </script>
 </div>
 </body>

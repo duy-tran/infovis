@@ -103,9 +103,9 @@ function donut(category){
       for (var key in data) {
           sum += data[key];
       } 
-      g.select("text").transition().duration(900)
+      g.select("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)[0] + "," + arc.centroid(d)[1] + ")"; })
-      .text(function(d) { if (d.data.value) {return d.data.value;} });
+      .text(function(d) { if (d.data.value) {return d.data.value;} }).transition().duration(900);
       svg.select("text.text-tooltip").text(sum+'');
     }      
     return object;
