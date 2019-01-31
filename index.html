@@ -42,7 +42,7 @@
 <div class="row">
     <div class="span8">
         <div class="row" id="chart-zip">
-        <h4  style="padding-left: 20px;" id="map-title">Collisions distribution by area
+        <h4  style="padding-left: 20px; height: 20px;" id="map-title">Collisions distribution by area
         <span class="reset" style="visibility: hidden;">
             <a href="javascript:zipChart.filterAll();dc.redrawAll();">reset</a>
         </span>
@@ -350,7 +350,7 @@ d3.csv("./data/100k.csv").then(function(data) {
         .alwaysUseRounding(true)
         .gap(3)
 
-    var killedChart, injuredChart;
+    var killedChart, injuredChart, mapLegend;
 
     d3.json("./data/nyc.geojson").then(function (nycjson) {
         var size = 600;
@@ -396,7 +396,7 @@ d3.csv("./data/100k.csv").then(function(data) {
                 .group(accessors[defaultAccessors]) 
                 .controlsUseVisibility(true)
                 .colors(d3.scaleSequential(colorRange[defaultAccessors]))
-                .colorCalculator(function (d) { return d ? zipChart.colors()(d) : '#ddd'; })
+                .colorCalculator(function (d) { return d === undefined ? '#ddd' : zipChart.colors()(d); })
                 .overlayGeoJson(nycjson.features, "postalCode", function (d) {
                     return d.properties.postalCode;
                 })
@@ -419,7 +419,10 @@ d3.csv("./data/100k.csv").then(function(data) {
                                 .$el(d3.select("#chart-killed"))
                                 .data(peopleCountData)
                                 .render();
-                legend();
+                mapLegend = legend().container("#range-legend")
+                                .chartRange(d3.extent(zipChart.data(), zipChart.valueAccessor()))
+                                .chartType(defaultAccessors)
+                                .render();
     });               
 });
 </script>
