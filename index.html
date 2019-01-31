@@ -42,10 +42,11 @@
 <div class="row">
     <div class="span8">
         <div class="row" id="chart-zip">
-        <h4  style="padding-left: 20px; height: 20px;" id="map-title">Collisions distribution by area
-        <span class="reset" style="visibility: hidden;">
-            <a href="javascript:zipChart.filterAll();dc.redrawAll();">reset</a>
-        </span>
+        <h4  style="padding-left: 20px; height: 20px;" id="map-title"><z>Collisions</z> distribution by area
+        <a class="reset" href="javascript:zipChart.filterAll();dc.redrawAll();"
+                        style="visibility: hidden;">
+                        reset
+                        </a>
         </h4>
         </div>
         <div class="row">       
@@ -371,7 +372,7 @@ d3.csv(dataset).then(function(data) {
 
         d3.selectAll('#select-operation input')
           .on('click', function() {
-                document.getElementById("map-title").innerHTML=this.value + " distribution by area";
+                document.querySelector("z").innerHTML=this.value;
                 zipChart.group(accessors[this.value])
                         .colors(d3.scaleSequential(colorRange[this.value]));
                 mapLegend.chartType(this.value)
