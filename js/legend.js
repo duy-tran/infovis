@@ -8,13 +8,22 @@ function legend(){
 		killed: ["#f7f3f9","#d4b9da","#d85eae","#c2005d","#660621"]
 	};
 
+	var colorSet = [];
+	for (var i = 0; i < colorRange.collisions.length; i++) {
+		var temp = {};
+		for (var key in colorRange) {
+			temp[key] = colorRange[key][i];
+		}
+		colorSet.push(temp);
+	}
+
 	var width = 300;
     var height = 20;
     var margin = 20;
     var shift = 75;
     var ticks = 5;
 
-    var svg;
+    var svg, stops;
     var xScale = d3.scaleLinear().range([margin, width-margin-1]);
     var xAxisCall = d3.axisTop().ticks(ticks);
     var object = {};
@@ -37,27 +46,23 @@ function legend(){
 	      				.attr("height", height+1)
 	      				.attr("id","chartColor")
 	     				.attr("transform", "translate(-20, -" + (shift) +")");
-	    var defs = svg.append("defs");
-
-	    for (var key in colorRange) {
-		    var linearGradient = defs.append("linearGradient")
-	    		.attr("id", "linear-gradient-"+key);
-	    	linearGradient
-		    	.attr("x1", "0%").attr("y1", "0%")
-		    	.attr("x2", "100%").attr("y2", "0%");
-		    var colorScale = d3.scaleLinear()
-	    		.range(colorRange[key]);
-	    	linearGradient.selectAll("stop")
-			    .data( colorScale.range() )
-			    .enter().append("stop")
-			    .attr("offset", function(d,i) { return i/(colorScale.range().length-1); })
-			    .attr("stop-color", function(d) { return d; });
-		}
+	    var gradient = svg.append("defs")
+		    .append("linearGradient")
+		    .attr("id", "linear-gradient");
+		gradient
+		    .attr("x1", "0%").attr("y1", "0%")
+		    .attr("x2", "100%").attr("y2", "0%");
+		stops = gradient.selectAll("stop")
+		    .data(colorSet)
+		    .enter()
+		    .append("stop")
+		    .attr("offset",function(d,i) { return i/4; })
+		    .attr("stop-color", function(d) { return d.collisions; });
 	    svg.append("rect")
 	    	.attr("id","color-filler")
 	    	.attr("width", width - height*2)
 	    	.attr("height", height)
-	    	.style("fill", "url(#linear-gradient-"+cType+")");
+	    	.style("fill", "url(#linear-gradient)");
 	    return object;
     };
 
@@ -69,8 +74,9 @@ function legend(){
     }
 
     object.changeType = function() {
-		d3.select("#color-filler").transition().duration(900)
-			.style("fill", "url(#linear-gradient-"+cType+")");
+    	stops.transition()
+			.attr("stop-color", function(d) { return d[cType]; })
+			.duration(900);
 		return object;
     }
 
