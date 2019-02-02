@@ -82,7 +82,7 @@
         </div>
         <div class="row">
             <div class="span12" id="chart-ring-year">
-              <div class="row"><h4 style="margin: 5px">Number of collisions per year <a class="reset"
+              <div class="row"><h4>Number of collisions per year <a class="reset"
                 href="javascript:yearRingChart.filterAll();dc.redrawAll();"
                 style="visibility: hidden;">
                 reset
@@ -272,7 +272,7 @@ d3.csv(dataset).then(function(data) {
         .group(all);
 
     yearRingChart
-        .width(200).height(180)
+        .width(200).height(190)
         .dimension(yearDim)
         .group(collisionsPerYear)
         .controlsUseVisibility(true)
