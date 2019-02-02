@@ -49,12 +49,20 @@
                         </a>
         </h4>
         </div>
-        <div class="row">       
-            <div class="span4" id="select-operation">
-                <label><input type=radio name="operation" value="collisions" checked="true"> Collisions</label>
-                <label><input type=radio name="operation" value="injured"> Injured</label>
-                <label><input type=radio name="operation" value="killed"> Killed</label>
-            </div>
+        <div class="row">  
+            <div class="span4">
+                <div class="btn-group btn-group-toggle" id="select-operation">
+                  <label class="btn btn-primary" id="check-collisions">
+                    <input type="radio" class="hide" name="options" value="collisions" autocomplete="off"> Collisions
+                  </label>
+                  <label class="btn btn-secondary" id="check-injured">
+                    <input type="radio" class="hide" name="options" value="injured" autocomplete="off"> Injured
+                  </label>
+                  <label class="btn btn-secondary" id="check-killed">
+                    <input type="radio" class="hide" name="options" value="killed" autocomplete="off"> Killed
+                  </label>
+                </div>
+            </div>     
             <div class="span4" id="range-legend" style="height: 20px;">
             </div>
         </div>
@@ -370,8 +378,16 @@ d3.csv(dataset).then(function(data) {
             killed: d3.interpolatePuRd
         }; 
 
+        var defaultAccessors = 'collisions';
+
+        var previousChecked = defaultAccessors;
+
         d3.selectAll('#select-operation input')
           .on('click', function() {
+            if (this.value != previousChecked) {
+                document.getElementById("check-"+previousChecked).classList.replace("btn-primary", "btn-secondary");
+                document.getElementById("check-"+this.value).classList.replace("btn-secondary", "btn-primary");
+                previousChecked = this.value;
                 document.querySelector("z").innerHTML=this.value;
                 zipChart.group(accessors[this.value])
                         .colors(d3.scaleSequential(colorRange[this.value]));
@@ -380,6 +396,7 @@ d3.csv(dataset).then(function(data) {
                         .chartRange(d3.extent(zipChart.data(), zipChart.valueAccessor()))
                         .changeRange();
                 dc.redrawAll();
+            }
           });
 
         zipChart.on("preRender", function(chart) {
@@ -400,7 +417,7 @@ d3.csv(dataset).then(function(data) {
                         .changeRange();
             });
         });
-        var defaultAccessors = 'collisions';
+        
         zipChart.width(size)
                 .height(size)
                 .dimension(zipDim)
