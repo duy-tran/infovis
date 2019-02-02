@@ -36,8 +36,8 @@
          selected out of 
         <span class="total-count"></span>
          records | 
-        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a> |
-        <a href="javascript:changeData('full')" id="data-full" class="choose-data">Full data</a> | <a href="javascript:changeData('small')" id="data-small" class="choose-data disable"> Smaller sample (100k)</a>
+        <a href="javascript:dc.filterAll(); dc.renderAll();">Reset All</a> <!-- |
+        <a href="javascript:changeData('full')" id="data-full" class="choose-data">Full data</a> | <a href="javascript:changeData('small')" id="data-small" class="choose-data disable"> Smaller sample (100k)</a> -->
         
 </div>
 </div>
@@ -460,28 +460,28 @@ d3.csv(dataset).then(function(data) {
 loadData(dataSet);  
 </script>
 <script type="text/javascript">
-    function changeData(value) {
-        if (value == 'small') {
-            window.location.reload(true);
-        }
-        var dataURL;
-        var dataDir = './data/'; 
-        var dataSets = {full: 'data.csv', small: '100k.csv' }
-        for (var key in dataSets) {
-            if (key == value) {
-                document.getElementById("data-"+key).classList.add("disable");
-                dataURL = dataDir + dataSets[key];
-            } else {
-                document.getElementById("data-"+key).classList.remove("disable");
-            }
-    }
-    document.getElementById("range-legend").innerHTML = "";
-    document.getElementById("chart-injured").innerHTML = "";
-    document.getElementById("chart-killed").innerHTML = "";
-    document.getElementById("loading-text").innerHTML = "Loading data";
-    document.getElementById("cover").classList.remove("hidden");
-    loadData(dataURL);
-}
+    // function changeData(value) {
+    //     if (value == 'small') {
+    //         window.location.reload(true);
+    //     }
+    //     var dataURL;
+    //     var dataDir = './data/'; 
+    //     var dataSets = {full: 'data.csv', small: '100k.csv' }
+    //     for (var key in dataSets) {
+    //         if (key == value) {
+    //             document.getElementById("data-"+key).classList.add("disable");
+    //             dataURL = dataDir + dataSets[key];
+    //         } else {
+    //             document.getElementById("data-"+key).classList.remove("disable");
+    //         }
+    //     }
+    //     document.getElementById("range-legend").innerHTML = "";
+    //     document.getElementById("chart-injured").innerHTML = "";
+    //     document.getElementById("chart-killed").innerHTML = "";
+    //     document.getElementById("loading-text").innerHTML = "Loading data";
+    //     document.getElementById("cover").classList.remove("hidden");
+    //     loadData(dataURL);
+    // }
 </script>
 </div>
 </body>
