@@ -61,3 +61,9 @@ div.inline {
 label {
     cursor: pointer;
 }
+a.disable {
+  pointer-events: none;
+  cursor: default;
+  color: #999;
+  font-style: none;
+}
